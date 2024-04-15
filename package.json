@@ -1,0 +1,23 @@
+{
+  "name": "clinic-backend",
+  "version": "1.0.0",
+  "description": "Backend for AI Dental Clinic Appointment System",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CodeGeek04/Clinic-Ai-Backend-Node.git"
+  },
+  "author": "Abhishek Shivam",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0",
+    "prisma": "^5.12.1"
+  }
+}
