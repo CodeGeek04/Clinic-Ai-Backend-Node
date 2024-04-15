@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,80 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Bot {
+  developerEmail String @id @unique @default("shivammittal2124@gmail.com")
+  cancelLimit    Int    @default(3)
+}
+
+model User {
+  mobile        String   @id @unique
+  name          String?  @default("")
+  dob           String?  @default("")
+  address       String?  @default("")
+  latitude      Float?   @default(0)
+  longitude     Float?   @default(0)
+  email         String?  @default("")
+  referredBy    String?  @default("")
+  referralCode  String   @unique
+  referralCount Int      @default(0)
+  platform      String   @default("whatsapp")
+  cancelCount   Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  conversations Conversation[]
+  appointments  Appointment[]
+}
+
+model Clinic {
+  id        Int      @id @default(autoincrement())
+  mobile    String   @default("")
+  name      String   @default("")
+  email     String   @default("")
+  address   String   @default("")
+  latitude  Float    @default(0)
+  longitude Float    @default(0)
+  mapUrl    String   @default("")
+  startTime Int      @default(9)
+  endTime   Int      @default(17)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointments Appointment[]
+}
+
+model Conversation {
+  id        String   @id @default(uuid())
+  mobile    String
+  speaker   String   @default("user")
+  content   String   @default("")
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [mobile], references: [mobile])
+}
+
+model Appointment {
+  id         String   @id @default(uuid())
+  userMobile String
+  clinicId   Int
+  date       DateTime
+  status     String   @default("pending")
+  threadId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user          User           @relation(fields: [userMobile], references: [mobile])
+  clinic        Clinic         @relation(fields: [clinicId], references: [id])
+  notifications Notification[]
+}
+
+model Notification {
+  id            String   @id @default(uuid())
+  time          DateTime
+  appointmentId String
+  status        String   @default("not sent")
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
 }
